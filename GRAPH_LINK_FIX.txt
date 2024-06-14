@@ -1,0 +1,3 @@
+--graph-line:#92bd4c
+
+Replace this in lib/styles/obsidian.css
