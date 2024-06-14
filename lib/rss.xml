@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Information Retrieval]]></title><description><![CDATA[Obsidian digital garden]]></description><link>http://github.com/dylang/node-rss</link><image><url>lib/media/favicon.png</url><title>Information Retrieval</title><link></link></image><generator>Webpage HTML Export plugin for Obsidian</generator><lastBuildDate>Fri, 14 Jun 2024 12:08:25 GMT</lastBuildDate><atom:link href="lib/rss.xml" rel="self" type="application/rss+xml"/><pubDate>Fri, 14 Jun 2024 12:07:53 GMT</pubDate><ttl>60</ttl><dc:creator></dc:creator><item><title><![CDATA[Bag of Words]]></title><description><![CDATA[ 
+ <br>
+<br>Calculates the similarity based on the query - document overlap, using <a data-href="Jaccard coefficient" href="/jaccard-coefficient.html" class="internal-link" target="_self" rel="noopener">Jaccard coefficient</a>, or other methods.
+<br>Doesn’t consider the ordering of words in a document.<br>
+We compute,
+]]></description><link>bag-of-words.html</link><guid isPermaLink="false">Bag of Words.md</guid><pubDate>Thu, 02 May 2024 01:37:07 GMT</pubDate></item><item><title><![CDATA[Binary Independence Model (BIM)]]></title><description><![CDATA[ 
+ <br><br>
+<br>Binary  Term either occurs, or does not. No notion of term weights. Documents represented as binary incidence vectors of terms .
+<br>Independence  terms occur independently of each other, and relevance of each document is independent of relevance of other documents.<br>
+We define the following notation.<br>
+<img alt="Probability Definitions.png" src="/probability-definitions.png">
+<br><br>Using independence assumption, we arrive ati.e., the probability of each term that occurs in , OCCURRING in a relevant document divided by the probability of that term occurring in a non-relevant document, multiplied by the probability of each term that does NOT occur in , being absent in a relevant document divided by the probability of that term being absent in a non-relevant document.<br>This can be fairly approximated byi.e. for each term OCCURRING in the document, the probability that it occurs in a relevant document multiplied by the probability of it being absent in a non-relevant document, divided by the probability of it occurring in a non-relevant document and the probability of it being absent in a relevant document.<br><br>The score is computed asIf  is constant (say, 0.5), and  is approximated by the entire collection ,where  number of terms  occurs in, and .<br>This is extended upon by <a data-href="BM25" href="/bm25.html" class="internal-link" target="_self" rel="noopener">BM25</a>.]]></description><link>binary-independence-model-(bim).html</link><guid isPermaLink="false">Binary Independence Model (BIM).md</guid><pubDate>Thu, 02 May 2024 02:17:10 GMT</pubDate><enclosure url="probability-definitions.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;probability-definitions.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[BM25]]></title><description><![CDATA[ 
+ <br>Based on the same assumptions as the <a data-href="Binary Independence Model (BIM)" href="/binary-independence-model-(bim).html" class="internal-link" target="_self" rel="noopener">Binary Independence Model (BIM)</a>.<br>
+<br><br><br>
+<br>Binary  Term either occurs, or does not. No notion of term weights. Documents represented as binary incidence vectors of terms .
+<br>Independence  terms occur independently of each other, and relevance of each document is independent of relevance of other documents.<br>
+We define the following notation.<br>
+<img alt="Probability Definitions.png" src="/probability-definitions.png">
+<br>
+However, the difference lies in the implementation of the saturation function to implement a form of -.<br><br>
+<br>BM25 v1:
+<br>BM25 v2:This is similar to -, except term scores are bounded.<br>
+These models had no length normalisation, and this is what the Okapi model fixed.
+<br><br>Defining document length as , we calculate the average length of documents over collection  and call it , to calculate the length normalisation componentwhere  is a hyperparameter.  corresponds to full length normalisation, and  corresponds to no length normalisation.<br>This is implemented in the weight function asThe hyperparameters<br>
+<br> controls term-frequency scaling.
+<br> controls document length normalisation.
+<br><br>The total score for a document  given a query  is given as]]></description><link>bm25.html</link><guid isPermaLink="false">BM25.md</guid><pubDate>Thu, 02 May 2024 02:35:56 GMT</pubDate><enclosure url="probability-definitions.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;probability-definitions.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Boolean retrieval model]]></title><description><![CDATA[ 
+ <br>One of the most basic models for information retrieval.<br>
+<br>Implemented through a <a class="internal-link" data-href="Term-document incidence matrix" href="/term-document-incidence-matrix.html" target="_self" rel="noopener">term-document incidence matrix</a>.
+<br>Allows for quick and easy <a class="internal-link" data-href="Merging" href="/merging.html" target="_self" rel="noopener">merging</a> through Boolean operations AND, OR, NOT.
+<br>Burden lies on the user to formulate an exact query. A general approach may be:
+
+<br>Too little results  use more OR operations.
+<br>Too many irrelevant results  use more AND operations.
+
+
+]]></description><link>boolean-retrieval-model.html</link><guid isPermaLink="false">Boolean retrieval model.md</guid><pubDate>Wed, 17 Jan 2024 07:11:44 GMT</pubDate></item><item><title><![CDATA[Dirichlet Smoothing]]></title><description><![CDATA[ 
+ <br>Fixes <a data-href="Jelinek-Mercer Smoothing" href="/jelinek-mercer-smoothing.html" class="internal-link" target="_self" rel="noopener">Jelinek-Mercer Smoothing</a>by implementing]]></description><link>dirichlet-smoothing.html</link><guid isPermaLink="false">Dirichlet Smoothing.md</guid><pubDate>Thu, 02 May 2024 03:01:28 GMT</pubDate></item><item><title><![CDATA[Discriminatory ranking of terms in score]]></title><description><![CDATA[ 
+ <br>We implement inverse document frequency as a metric for rarity of a term. Given , we implement it in the score aswhere  is the scaling function implemented atop  and  is the scaling function implemented for .<br>Refer to <a data-tooltip-position="top" aria-label="Setting Term Weights" data-href="Setting Term Weights" href="/setting-term-weights.html" class="internal-link" target="_self" rel="noopener">setting term weights</a> for details.]]></description><link>discriminatory-ranking-of-terms-in-score.html</link><guid isPermaLink="false">Discriminatory ranking of terms in score.md</guid><pubDate>Thu, 02 May 2024 01:27:20 GMT</pubDate></item><item><title><![CDATA[Heaps' law]]></title><description><![CDATA[ 
+ <br>States that the number of new words decreases as the size of the corpus increases.where ,  is a constant unequal to that of Zipf's constant,  size of the corpus,  is another constant.]]></description><link>heaps&apos;-law.html</link><guid isPermaLink="false">Heaps&apos; law.md</guid><pubDate>Thu, 02 May 2024 00:08:44 GMT</pubDate></item><item><title><![CDATA[Indexing]]></title><description><![CDATA[ 
+ <br>An essential aspect of an information retrieval model is the problem of obtaining a set of relevant documents  given a query containing query words .<br>For this, we must index each document in our corpus. A preliminary step is obtaining the docIDs of each document, and obtaining a vocabulary  containing each <a class="internal-link" data-href="Text processing" href="/Text processing" target="_self" rel="noopener">processed token</a>.<br>An (extremely) primary approach is creating a <a class="internal-link" data-href="Boolean retrieval model" href="/boolean-retrieval-model.html" target="_self" rel="noopener">term-document matrix</a>.<br>A much faster, more efficient method is <a class="internal-link" data-href="Inverted index" href="/inverted-index.html" target="_self" rel="noopener">inverted indexing</a>.<br><br>While creating the index, documents are parsed one at a time. Final postings of any term is incomplete till the end. How do we sort such a huge collection?<br>
+External sorting.<br>
+We cannot sort the entire index in secondary memory, as that would be too slow. Instead, we make use of block-based sorting techniques.
+]]></description><link>indexing.html</link><guid isPermaLink="false">Indexing.md</guid><pubDate>Thu, 02 May 2024 00:23:25 GMT</pubDate></item><item><title><![CDATA[Inverted index]]></title><description><![CDATA[ 
+ <br>A much faster, and more efficient method than a <a class="internal-link" data-href="Boolean retrieval model" href="/boolean-retrieval-model.html" target="_self" rel="noopener">term-document matrix</a>.<br>Inverted index (also known as postings lists) is implemented as a (doubly) linked list containing the docIDs of all the documents in which a word (<a class="internal-link" data-href="Text processing" href="/Text processing" target="_self" rel="noopener">processed token</a>) occurs.<br>
+For example,<br>
+<br><br>Given a query , produce a set of documents  relevant to the query.<br><br>Given the postings lists of each processed token  and its postings list  we must find a way to merge these lists to find a relevant result.<br>
+Details of this are covered in <a data-href="Merging" href="/merging.html" class="internal-link" target="_self" rel="noopener">Merging</a>.<br><br>
+<br>Document frequencies are relevant (for now).
+
+<br>Given three processed tokens  with postings lists  of length  respectively, such that say,  it is more efficient to merge with  of length  first.
+<br>Can prove to be useful in <a class="internal-link" data-href="Ranking" href="/ranking.html" target="_self" rel="noopener">ranking</a> tokens in the retrieval model using tf-idf.
+
+
+<br>Term frequencies are also relevant.
+
+<br>Can play a role in <a class="internal-link" data-href="Ranking" href="/ranking.html" target="_self" rel="noopener">ranking</a> documents.
+
+
+<br><br>
+We create a dictionary with keys , and values  where each node is 
+<br>NOTE: Collection frequency  can also prove to be a relevant metric. This plays a role in <a class="internal-link" data-href="Ranking" href="/ranking.html" target="_self" rel="noopener">ranking</a> of documents by the retrieval model.<br>What data structure should we implement for this dynamic dictionary for efficient search?<br>
+<br>Hashing
+
+<br>Faster than a search tree? (No restructuring, no skewing, less time complexity.)
+<br>High space complexity. Requires substantial random access memory.
+
+
+<br>Search tree
+
+<br>Slower?
+<br>The <a data-href="TRIE" href="/trie.html" class="internal-link" target="_self" rel="noopener">TRIE</a> tree.
+
+
+<br><br>How should we store the inverted index?<br><br>To search for a term in the dictionary as quickly as possible.<br><br>
+<br>To <a class="internal-link" data-href="Storing the Dictionary" href="/storing-the-dictionary.html" target="_self" rel="noopener">store the dictionary</a>  where * denotes the pointer to the postings list. This is less frequently updated.
+<br>To <a class="internal-link" data-href="Storing the postings list" href="/storing-the-postings-list.html" target="_self" rel="noopener">store the postings list</a>. This is more frequently updated.
+]]></description><link>inverted-index.html</link><guid isPermaLink="false">Inverted index.md</guid><pubDate>Thu, 18 Jan 2024 13:10:57 GMT</pubDate></item><item><title><![CDATA[Jaccard coefficient]]></title><description><![CDATA[ 
+ <br>A commonly used metric to measure overlap of two sets A and B,However, retrieval using this is not much different from Boolean retrieval.<br>
+<br>No implementation of term-frequency in document.
+<br>No notion of term importance or discriminatory power.
+<br>No length normalisation for document.
+]]></description><link>jaccard-coefficient.html</link><guid isPermaLink="false">Jaccard coefficient.md</guid><pubDate>Thu, 02 May 2024 00:44:20 GMT</pubDate></item><item><title><![CDATA[Jelinek-Mercer Smoothing]]></title><description><![CDATA[ 
+ <br>Apply smoothing aswhere  is a collection language model.<br>
+<br>High value of : ‘conjunctive-like’ search - tends to retrieve documents containing all query words.
+<br>Low value of : ‘disjunctive-like’ search - suitable for long queries.
+<br><br>Shorter documents are given priority, since  is the same for documents of all length.<br>
+Fixed by <a data-href="Dirichlet Smoothing" href="/dirichlet-smoothing.html" class="internal-link" target="_self" rel="noopener">Dirichlet Smoothing</a>.]]></description><link>jelinek-mercer-smoothing.html</link><guid isPermaLink="false">Jelinek-Mercer Smoothing.md</guid><pubDate>Thu, 02 May 2024 03:00:29 GMT</pubDate></item><item><title><![CDATA[Language Model]]></title><description><![CDATA[ 
+ <br>We can create a language model (a probability distribution) out of any piece of text:<br>
+<br>Documents - document language model
+<br>Query - query language model
+<br>Corpus - collection language model<br>
+Given a language model, we can assign a probability to any piece of text being generated from the model.
+<br><br>
+<br>Create language models 
+<br>Given , rank all  in order of <br>
+We use the unigram language model for information retrieval purposes, with the assumption of independent term occurrence. Thus,This needs smoothing, because one term missing sends the entire score to zero.
+<br><br>
+<br><a data-href="Jelinek-Mercer Smoothing" href="/jelinek-mercer-smoothing.html" class="internal-link" target="_self" rel="noopener">Jelinek-Mercer Smoothing</a>
+<br><a data-href="Dirichlet Smoothing" href="/dirichlet-smoothing.html" class="internal-link" target="_self" rel="noopener">Dirichlet Smoothing</a><br>
+Implementing Dirichlet smoothing, the final LM score is calculated as
+]]></description><link>language-model.html</link><guid isPermaLink="false">Language Model.md</guid><pubDate>Thu, 02 May 2024 03:05:25 GMT</pubDate></item><item><title><![CDATA[Merging]]></title><description><![CDATA[ 
+ <br>We must merge the inverted indices of each query word .<br>
+<br>Can find intersection (AND) of <a class="internal-link" data-href="Inverted index" href="/inverted-index.html" target="_self" rel="noopener">postings lists</a> of each query word .
+
+<br>Generally not feasible. Often produces too little results.
+
+
+<br>Can find union (OR) of <a class="internal-link" data-href="Inverted index" href="/inverted-index.html" target="_self" rel="noopener">postings lists</a> of each query word .
+
+<br>Generally not feasible. Often produces too many, and irrelevant results.
+
+
+<br>Can we implement a conditional similar to "SHOULD" instead? We discuss this later.
+]]></description><link>merging.html</link><guid isPermaLink="false">Merging.md</guid><pubDate>Wed, 17 Jan 2024 07:02:15 GMT</pubDate></item><item><title><![CDATA[Probabilistic Model]]></title><description><![CDATA[ 
+ <br>The response to a query  is ranking of documents  in order of decreasing probability of relevance.<br>Goal: For document , estimate  using Bayes' theorem.Estimating the probabilities is done differently based on the model being used:<br>
+<br><a data-href="Binary Independence Model (BIM)" href="/binary-independence-model-(bim).html" class="internal-link" target="_self" rel="noopener">Binary Independence Model (BIM)</a>
+<br><a data-href="BM25" href="/bm25.html" class="internal-link" target="_self" rel="noopener">BM25</a>
+<br><a data-href="Language Model" href="/language-model.html" class="internal-link" target="_self" rel="noopener">Language Model</a>
+]]></description><link>probabilistic-model.html</link><guid isPermaLink="false">Probabilistic Model.md</guid><pubDate>Thu, 02 May 2024 02:43:25 GMT</pubDate></item><item><title><![CDATA[Ranking]]></title><description><![CDATA[ 
+ <br>Ranking of documents is central to ranked retrieval models.<br>Boolean retrieval model<br><br>One of the most basic models for information retrieval.<br>
+<br>Implemented through a <a class="internal-link" data-href="Term-document incidence matrix" href="/term-document-incidence-matrix.html" target="_self" rel="noopener">term-document incidence matrix</a>.
+<br>Allows for quick and easy <a class="internal-link" data-href="Merging" href="/merging.html" target="_self" rel="noopener">merging</a> through Boolean operations AND, OR, NOT.
+<br>Burden lies on the user to formulate an exact query. A general approach may be:
+
+<br>Too little results  use more OR operations.
+<br>Too many irrelevant results  use more AND operations.
+
+
+<br>
+The drawbacks of a boolean retrieval model are well understood. To move on from this to <a data-tooltip-position="top" aria-label="Relevance Based Retrieval" data-href="Relevance Based Retrieval" href="/relevance-based-retrieval.html" class="internal-link" target="_self" rel="noopener">relevance based retrieval</a> (in other words, moving on from exact-match retrieval models to best-match retrieval models), ranking of documents is essential.<br>Once the relevance rel(d,Q) for each document d given a query Q has been calculated, documents can be ranked.]]></description><link>ranking.html</link><guid isPermaLink="false">Ranking.md</guid><pubDate>Thu, 02 May 2024 00:34:31 GMT</pubDate></item><item><title><![CDATA[Relevance based Language Model (RLM)]]></title><description><![CDATA[ 
+ <br>
+<br>Assumes the both query and relevant documents are sampled from a latent relevance model .
+<br>In absence of training data, top ranked documents are considered as set of relevant documents (<a data-href="Pseudo-Relevance Feedback" href="/Pseudo-Relevance Feedback" class="internal-link" target="_self" rel="noopener">Pseudo-Relevance Feedback</a>).
+<br>The query is the only absolute evidence about the relevance model.
+<br>The task is to find the density function for .
+<br>This estimates  on the basis of .<br>
+	where  is the joint probability of observing  with , and  is the prior probability of .<br>
+The further approach determines the type of model used.
+<br>
+<br><a data-href="RM1" href="/rm1.html" class="internal-link" target="_self" rel="noopener">RM1</a>, assuming an independent and identical distribution in the relevance model.
+<br><a data-href="RM2" href="/RM2" class="internal-link" target="_self" rel="noopener">RM2</a>, assuming a conditional distribution in the relevance model.
+<br><a data-href="RM3" href="/rm3.html" class="internal-link" target="_self" rel="noopener">RM3</a>, a mixture model of RLM and query likelihood model.
+<br>RM3 has been shown to have the best performance among the RLM models. As such, the entire algorithm for pseudo-relevant RM3 goes like:<br>
+<br>First-phase retrieval performed using any model.
+<br> collection of all terms in top  ranked relevant documents; considered as potential expansion terms.
+<br>Estimate  as
+<br> terms with high estimated value in  taken as query expansion terms.
+<br>Linearly interpolate derived density function with underlying query language model:
+]]></description><link>relevance-based-language-model-(rlm).html</link><guid isPermaLink="false">Relevance based Language Model (RLM).md</guid><pubDate>Thu, 02 May 2024 03:40:01 GMT</pubDate></item><item><title><![CDATA[Relevance Based Retrieval]]></title><description><![CDATA[ 
+ <br>The goal is the prediction of given documents , and a query .<br>This is estimated viafor all .<br>Depending on this <a data-tooltip-position="top" aria-label="Scoring" data-href="Scoring" href="/scoring.html" class="internal-link" target="_self" rel="noopener">score</a>, a ranked list is produced.<br>Implemented via models like<br>
+<br><a data-href="Bag of Words" href="/bag-of-words.html" class="internal-link" target="_self" rel="noopener">Bag of Words</a>
+<br><a data-href="Vector Space Model" href="/vector-space-model.html" class="internal-link" target="_self" rel="noopener">Vector Space Model</a>
+<br><a data-href="Probabilistic Model" href="/probabilistic-model.html" class="internal-link" target="_self" rel="noopener">Probabilistic Model</a>
+<br><a data-href="Relevance feedback model" href="/relevance-feedback-model.html" class="internal-link" target="_self" rel="noopener">Relevance feedback model</a>
+]]></description><link>relevance-based-retrieval.html</link><guid isPermaLink="false">Relevance Based Retrieval.md</guid><pubDate>Thu, 02 May 2024 03:40:25 GMT</pubDate></item><item><title><![CDATA[Relevance feedback model]]></title><description><![CDATA[ 
+ <br>So far we've been building retrieval models by creating a scoring model as a function of the overlap between a document  and query .<br>This leaves the desire to improve upon the oftentimes low overlap . To increase overlap , we aim to increase query  by increasing the number of query terms.<br>This is where a relevance feedback model comes in. As the name suggests, this model uses the feedback of which documents are relevant to the user, to redistribute weights in the query (and add or remove query terms according the feedback).<br>There are primarily three types of relevance feedback models:<br>
+<br><a data-tooltip-position="top" aria-label="True/Explicit Relevance Feedback" data-href="True/Explicit Relevance Feedback" href="/True/Explicit Relevance Feedback" class="internal-link" target="_self" rel="noopener">True/Explicit relevance feedback</a>.
+
+<br>Takes in both relevance and non-relevance feedback.
+
+
+<br>Implicit relevance feedback.
+
+<br>Takes in mostly relevance feedback.
+<br>Uses factors like <a data-tooltip-position="top" aria-label="Dwell Time" data-href="Dwell Time" href="/Dwell Time" class="internal-link" target="_self" rel="noopener">dwell time</a> and which documents are clicked upon to determine relevance.
+
+
+<br><a data-tooltip-position="top" aria-label="Pseudo-Relevance Feedback" data-href="Pseudo-Relevance Feedback" href="/Pseudo-Relevance Feedback" class="internal-link" target="_self" rel="noopener">Pseudo-relevance feedback</a>.
+
+<br>Assumption that top-ranked documents are relevant.
+<br>Takes in mostly relevance feedback.
+<br>Mostly used in context of this course.
+<br>Obvious danger of <a data-tooltip-position="top" aria-label="Query Drifting" data-href="Query Drifting" href="/Query Drifting" class="internal-link" target="_self" rel="noopener">query drifting</a>.
+
+
+<br>An approach in implementing this model can be found in <a data-tooltip-position="top" aria-label="Rocchio's Algorithm" data-href="Rocchio's Algorithm" href="/rocchio's-algorithm.html" class="internal-link" target="_self" rel="noopener">Rocchio's algorithm</a>, based on the <a data-tooltip-position="top" aria-label="Vector Space Model" data-href="Vector Space Model" href="/vector-space-model.html" class="internal-link" target="_self" rel="noopener">vector space model</a>.<br>If implementing a <a data-tooltip-position="top" aria-label="Language Model" data-href="Language Model" href="/language-model.html" class="internal-link" target="_self" rel="noopener">language model</a> approach instead, <a data-tooltip-position="top" aria-label="Relevance based Language Model (RLM)" data-href="Relevance based Language Model (RLM)" href="/relevance-based-language-model-(rlm).html" class="internal-link" target="_self" rel="noopener">RLM</a> may be used.]]></description><link>relevance-feedback-model.html</link><guid isPermaLink="false">Relevance feedback model.md</guid><pubDate>Thu, 04 Apr 2024 12:32:22 GMT</pubDate></item><item><title><![CDATA[RM1]]></title><description><![CDATA[ 
+ <br>Assumes an independent and identical distribution in the relevance model, i.e.<br>
+which is the probability of obtaining  together with  in a document in the pseudo-relevant set , so that<br>
+where<br>
+and  is the prior probability for the document .]]></description><link>rm1.html</link><guid isPermaLink="false">RM1.md</guid><pubDate>Thu, 04 Apr 2024 13:02:07 GMT</pubDate></item><item><title><![CDATA[RM3]]></title><description><![CDATA[ 
+ <br>An extension of <a data-href="RM1" href="/rm1.html" class="internal-link" target="_self" rel="noopener">RM1</a>, since the assumption of IIDs procures better result than the foundation of conditional drawing in <a data-href="RM2" href="/RM2" class="internal-link" target="_self" rel="noopener">RM2</a>, improving on the drawback of <a data-href="RM1" href="/rm1.html" class="internal-link" target="_self" rel="noopener">RM1</a> being the fact that query terms are not given priority in the estimation of the relevance model .<br>
+where  is a hyperparameter, such that . The lower the value of , the more the priority given to the query terms.]]></description><link>rm3.html</link><guid isPermaLink="false">RM3.md</guid><pubDate>Thu, 04 Apr 2024 13:09:31 GMT</pubDate></item><item><title><![CDATA[Rocchio's Algorithm]]></title><description><![CDATA[ 
+ <br>
+<br>Compute centroid for relevant documents.
+<br>Compute centroid for non-relevant documents.
+<br>Modify query aswhere  is the modified query,  is the original query, and  are beliefs of corresponding sets.
+<br> and  are set higher for more judged documents.]]></description><link>rocchio&apos;s-algorithm.html</link><guid isPermaLink="false">Rocchio&apos;s Algorithm.md</guid><pubDate>Thu, 02 May 2024 03:47:58 GMT</pubDate></item><item><title><![CDATA[Scoring]]></title><description><![CDATA[ 
+ <br>Given  and , computeGiven document  and query ,Desirable points:<br>
+<br><a data-href="Term frequency weighting" href="/term-frequency-weighting.html" class="internal-link" target="_self" rel="noopener">Term frequency weighting</a>.
+<br><a data-href="Discriminatory ranking of terms in score" href="/discriminatory-ranking-of-terms-in-score.html" class="internal-link" target="_self" rel="noopener">Discriminatory ranking of terms in score</a>.
+]]></description><link>scoring.html</link><guid isPermaLink="false">Scoring.md</guid><pubDate>Thu, 02 May 2024 01:36:45 GMT</pubDate></item><item><title><![CDATA[Search Tree]]></title><description><![CDATA[ 
+ <br>To store the dictionary of an inverted index , search trees prove to be feasible data structures.<br>Typical trees that prove to be usable for this requirement:<br>
+<br>Binary search tree
+<br>AVL tree
+<br>B tree<br>
+In addition to these, certain search trees have been specifically proven to be useful for information retrieval purposes. These are the
+<br><a data-href="TRIE" href="/trie.html" class="internal-link" target="_self" rel="noopener">TRIE</a> data structure.
+<br><a data-href="Splay tree" href="/Splay tree" class="internal-link" target="_self" rel="noopener">Splay tree</a>.
+]]></description><link>search-tree.html</link><guid isPermaLink="false">Search Tree.md</guid><pubDate>Sun, 21 Jan 2024 20:55:36 GMT</pubDate></item><item><title><![CDATA[Setting Term Weights]]></title><description><![CDATA[ 
+ <br><img alt="SMART notation.png" src="/smart-notation.png">SMART notation is given asA very standard weighting scheme is lnc.ltc.<br>Note
+
+We only take  score once for each term, so as to not blow up extremely rare terms.
+We compute  for the query part, to be faster, so we don't have to do it for each term in the document, and only for ones that do occur in the query.
+]]></description><link>setting-term-weights.html</link><guid isPermaLink="false">Setting Term Weights.md</guid><pubDate>Thu, 02 May 2024 01:33:49 GMT</pubDate><enclosure url="smart-notation.png" length="0" type="image/png"/><content:encoded>&lt;figure&gt;&lt;img src=&quot;smart-notation.png&quot;&gt;&lt;/figure&gt;</content:encoded></item><item><title><![CDATA[Storing the Dictionary]]></title><description><![CDATA[ 
+ <br>Storing the <a class="internal-link" data-href="Inverted index" href="/inverted-index.html" target="_self" rel="noopener">inverted index</a> dictionary  can be done primarily in two broad ways:<br>
+<br>Hashing
+<br><a data-href="Search Tree" href="/search-tree.html" class="internal-link" target="_self" rel="noopener">Search Tree</a><br>
+The method to be chosen depends on the following parameters:
+<br>
+<br>The number of terms to store.
+<br>Whether the storage needs to be dynamic, or if static storage is passable.
+<br>Relative frequency with which each term will be accessed.<br>
+Hashing can prove to be a very fast method for searches. Also, in case of a dynamic storage need, hashing is going to be the preferable method, since dynamic search trees can
+<br>
+<br>be very skewed (right/left heavy).
+<br>be very time complex in case of an implementation of height balancing.<br>
+However, hashing comes with its usual drawbacks (collisions,  looping hash failures, finite storage reliability, high random access memory requirement etc.) Also, related words (say, beginning with a certain prefix for example) are hashed in a way that loses their similarity. Thus, these queries pose a challenge to the hashing method for storage.
+<br>If we know the number of terms to be stored, an appropriate hashing function can be chosen to prevent collisions, but that defeats the purpose of dynamic programming in the first place.<br>How do we compress the dictionary?<br>
+Instead of storing the terms as individual strings, we store the entire vocabulary as one string, with term pointers pointing to the beginning of each term.
+]]></description><link>storing-the-dictionary.html</link><guid isPermaLink="false">Storing the Dictionary.md</guid><pubDate>Thu, 02 May 2024 00:18:29 GMT</pubDate></item><item><title><![CDATA[Storing the postings list]]></title><description><![CDATA[ 
+ <br>Can we compress the postings list?<br>Zipf's law<br><br>Zipf's law states that for a term ,As such, we can define the probability of observing a term,where , and  for English.<br>Given Zipf's law, <a data-href="Heaps' law" href="/heaps'-law.html" class="internal-link" target="_self" rel="noopener">Heaps' law</a> states how the number of new terms increases as the size of a corpus increases.<br>
+<br>As such, the most frequent words have very long postings lists. They do not carry much information.
+<br>We could choose not to store postings lists of the most common terms, but they hold important meaning when they occur in combination with others (proximity operators).
+<br>Instead, we choose to store them, but remove them from the query unless they occur in the case of proximity operators.
+<br>How do we compress the postings list?<br>
+Instead of storing the full docIDs, we can store the computed difference in successive docIDs. This reduces storage consumption by a lot.
+]]></description><link>storing-the-postings-list.html</link><guid isPermaLink="false">Storing the postings list.md</guid><pubDate>Thu, 02 May 2024 00:17:23 GMT</pubDate></item><item><title><![CDATA[Term frequency weighting]]></title><description><![CDATA[ 
+ <br>Relevance of a document scales with . However, it's not a linear scaling. Thus, we implement some sub-linear function for .Refer to <a data-tooltip-position="top" aria-label="Setting Term Weights" data-href="Setting Term Weights" href="/setting-term-weights.html" class="internal-link" target="_self" rel="noopener">setting term weights</a> for more ways to do this.]]></description><link>term-frequency-weighting.html</link><guid isPermaLink="false">Term frequency weighting.md</guid><pubDate>Thu, 02 May 2024 01:26:25 GMT</pubDate></item><item><title><![CDATA[Term-document incidence matrix]]></title><description><![CDATA[ 
+ <br>A matrix with each <a class="internal-link" data-href="Text processing" href="/Text processing" target="_self" rel="noopener">processed token</a>  in rows (columns) vs each docID  in columns (rows).<br>
+<br>Contains either 0 or 1.
+<br> denotes at least one occurrence of  in .
+<br>Used in <a class="internal-link" data-href="Boolean retrieval model" href="/boolean-retrieval-model.html" target="_self" rel="noopener">boolean retrieval models</a>.
+<br>These can be modified to include term counts in each document too, which may prove to be useful in <a class="internal-link" data-href="Ranking" href="/ranking.html" target="_self" rel="noopener">ranking of documents</a>.]]></description><link>term-document-incidence-matrix.html</link><guid isPermaLink="false">Term-document incidence matrix.md</guid><pubDate>Wed, 17 Jan 2024 07:17:11 GMT</pubDate></item><item><title><![CDATA[TRIE]]></title><description><![CDATA[ 
+ <br>
+<br>Obtained from the term "reTRIEval".
+<br>A very fast search tree important in information retrieval models, with a time complexity of  where  is the length of the term being searched for.
+<br>Character-based tree.
+<br>Huge space complexity.<br>
+The TRIE data structure has roots in the letters of the alphabet, that branch into more letters. It spans the vocabulary  by spelling out each <a class="internal-link" data-href="Text processing" href="/Text processing" target="_self" rel="noopener">word</a>  with each letter as a node in the tree.
+]]></description><link>trie.html</link><guid isPermaLink="false">TRIE.md</guid><pubDate>Sun, 21 Jan 2024 20:58:20 GMT</pubDate></item><item><title><![CDATA[Vector Space Model]]></title><description><![CDATA[ 
+ <br>Each  is treated as a vector in a  dimensional vector space.<br>The score for a document  given query  is computed asWhere  can be defined as<br><br>
+<br>Inner productThus, no overlap immediately gives 0 score.
+<br>Euclidean distanceHowever, length of  and  are not taken into account. Thus, similar  and  may have vast distance if their lengths are vastly different.
+<br>Angle, a.k.a. cosine similarityThis is generally considered to be the best approach among these three.
+<br><br>Now, given we have our basis vectors, how do we define the components for each vector representation?<br>
+<br>Binary incidence.
+<br>Term weights.where  and  are scaling functions. Refer to <a data-tooltip-position="top" aria-label="Setting Term Weights" data-href="Setting Term Weights" href="/setting-term-weights.html" class="internal-link" target="_self" rel="noopener">setting term weights</a> for details about  and .
+<br><br>Assumes terms are independent. No notion of term similarity.]]></description><link>vector-space-model.html</link><guid isPermaLink="false">Vector Space Model.md</guid><pubDate>Thu, 02 May 2024 01:35:20 GMT</pubDate></item><item><title><![CDATA[Zipf's law]]></title><description><![CDATA[ 
+ <br>Zipf's law states that for a term ,As such, we can define the probability of observing a term,where , and  for English.<br>Given Zipf's law, <a data-href="Heaps' law" href="/heaps'-law.html" class="internal-link" target="_self" rel="noopener">Heaps' law</a> states how the number of new terms increases as the size of a corpus increases.]]></description><link>zipf&apos;s-law.html</link><guid isPermaLink="false">Zipf&apos;s law.md</guid><pubDate>Thu, 02 May 2024 00:06:17 GMT</pubDate></item></channel></rss>
